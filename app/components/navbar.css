@@ -1,0 +1,23 @@
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: aliceblue;
+    padding: 5px 0;
+    font-family: 'Segoe UI';
+}
+
+.nav_links ul {
+    display: flex;
+    gap: 30px;
+}
+
+.nav_links ul li{
+    list-style: none;
+    font-size: 18px;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}

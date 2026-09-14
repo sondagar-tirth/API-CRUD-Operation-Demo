@@ -1,0 +1,45 @@
+.time_counter{
+    text-align: center;
+    width: 20%;
+    margin: 50px auto;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.time_counter_container{
+    padding: 12px;
+}
+
+.time_counter h1{
+    padding-bottom: 10px;
+    margin: 0;
+}
+
+.stop_button{
+    background-color: rgb(255, 97, 97);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.stop_button:hover{
+    background-color: rgb(179, 50, 50);
+    cursor: pointer;
+}
+
+.start_button{
+    background-color: rgb(46, 204, 113);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.start_button:hover{
+    background-color: rgb(39, 174, 96);
+    cursor: pointer;
+}

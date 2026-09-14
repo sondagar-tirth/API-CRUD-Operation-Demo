@@ -1,0 +1,18 @@
+.contact_form{
+    width: fit-content;
+    margin: 0 auto;
+    font-family: 'Segoe UI';
+}
+
+.contact_form h1 {
+    text-align: center;
+}
+
+.contact_form form table{
+    width: 100%;
+    column-gap: 20px;
+}
+
+.contact_form form table tr{
+    height: 40px;
+}

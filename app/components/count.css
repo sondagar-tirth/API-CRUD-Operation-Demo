@@ -1,0 +1,20 @@
+.counter{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #000;
+    width: fit-content;
+    margin: 5px 0 10px;
+}
+
+.counter p{
+    font-size: 20px;
+    background-color: azure;
+    margin: 0;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.counter p:hover{
+    background-color: aliceblue;
+}
