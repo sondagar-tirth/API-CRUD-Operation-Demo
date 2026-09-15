@@ -1,11 +1,12 @@
 import Link from "next/link"
 import DeleteButton from "./components/DeleteButton"
 import SearchBar from "./components/SearchBar"
+import Pagination from "./components/Pagination"
 
 export default async function EmployeesPage({ searchParams }) {
 
     const params = await searchParams
-    console.log(params)
+    // console.log(params)
     const page = Number(params.page) || 1
 
     const search = params.search || ""
@@ -55,40 +56,57 @@ export default async function EmployeesPage({ searchParams }) {
                 </thead>
 
                 <tbody>
-                    {empdata.users.length === 0 ? (
-                        <tr>
-                            <td colSpan="6" style={{textAlign: "center"}}>
-                                Employee Not Found!!!
-                            </td>
-                        </tr>
-                    ) : (
-                        empdata.users.map((emp, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td>{emp.id}</td>
-                                    <td>{emp.firstName} {emp.lastName}</td>
-                                    <td>{emp.gender}</td>
-                                    <td>{emp.age}</td>
-                                    <td>{emp.email}</td>
-                                    <td>
-                                        <Link href={`/employees/${emp.id}`}>
-                                            <button style={{ marginRight: "10px", cursor: "pointer" }}>
-                                                Detail
-                                            </button>
-                                        </Link>
+                    {
+                    // isPending ? (
+                    //     <tr>
+                    //         <td colSpan="6">
+                    //             <div
+                    //                 style={{
+                    //                     height: "300px",
+                    //                     display: "flex",
+                    //                     alignItems: "center",
+                    //                     justifyContent: "center"
+                    //                 }}
+                    //             >
+                    //                 <h2>Loading...</h2>
+                    //             </div>
+                    //         </td>
+                    //     </tr>
+                    // ) : 
+                    empdata.users.length === 0 ? (
+                            <tr>
+                                <td colSpan="6" style={{ textAlign: "center" }}>
+                                    Employee Not Found!!!
+                                </td>
+                            </tr>
+                        ) : (
+                            empdata.users.map((emp, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>{emp.id}</td>
+                                        <td>{emp.firstName} {emp.lastName}</td>
+                                        <td>{emp.gender}</td>
+                                        <td>{emp.age}</td>
+                                        <td>{emp.email}</td>
+                                        <td>
+                                            <Link href={`/employees/${emp.id}`}>
+                                                <button style={{ marginRight: "10px", cursor: "pointer" }}>
+                                                    Detail
+                                                </button>
+                                            </Link>
 
-                                        <Link href={`/employees/${emp.id}/edit`}>
-                                            <button style={{ marginRight: "10px", cursor: "pointer" }}>
-                                                Edit
-                                            </button>
-                                        </Link>
+                                            <Link href={`/employees/${emp.id}/edit`}>
+                                                <button style={{ marginRight: "10px", cursor: "pointer" }}>
+                                                    Edit
+                                                </button>
+                                            </Link>
 
-                                        <DeleteButton id={emp.id} />
-                                    </td>
-                                </tr>
-                            )
-                        })
-                    )}
+                                            <DeleteButton id={emp.id} />
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        )}
                 </tbody>
 
             </table>
@@ -96,36 +114,11 @@ export default async function EmployeesPage({ searchParams }) {
             {empdata.users.length === 0 ? (
                 <></>
             ) : (
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "20px",
-                        justifyContent: "space-between"
-                    }}
-                >
-                    <Link href={`/employees?page=${page - 1}`}>
-                        <button
-                            disabled={page === 1}
-                            style={{ cursor: "pointer" }}
-                        >
-                            Previous
-                        </button>
-                    </Link>
-
-                    <h3>
-                        Page: {page}/{totalPages}
-                    </h3>
-
-                    <Link href={`/employees?page=${page + 1}`}>
-                        <button
-                            disabled={page === totalPages}
-                            style={{ cursor: "pointer" }}
-                        >
-                            Next
-                        </button>
-                    </Link>
-                </div>
+                <Pagination
+                    page={page}
+                    totalPages={totalPages}
+                    search={search}
+                />
             )}
 
         </div>

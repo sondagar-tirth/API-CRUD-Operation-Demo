@@ -10,7 +10,7 @@ export default function SearchBar() {
     const router = useRouter()
 
     function handleSearch(e) {
-        
+
         const value = e.target.value
 
         setSearch(value)

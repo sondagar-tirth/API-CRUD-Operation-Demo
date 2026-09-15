@@ -10,18 +10,18 @@ export default function DeleteButton({ id }) {
             method: "DELETE"
         });
 
-        if(!res.ok){
+        if (!res.ok) {
             throw new Error("Employee Delete Failed")
         }
 
         const data = await res.json()
-        
+
         console.log(data)
-        
+
         router.refresh()
     }
 
     return (
-        <button onClick={deleteEmployee} style={{cursor: "pointer" }}>Delete</button>
+        <button onClick={deleteEmployee} style={{ cursor: "pointer" }}>Delete</button>
     );
 }

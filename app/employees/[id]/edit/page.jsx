@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation"
 export default function EditEmployeePage() {
 
     const [employee, setEmployee] = useState(null)
+    const [errors, setErrors] = useState({})
 
     const router = useRouter()
 
@@ -26,8 +27,53 @@ export default function EditEmployeePage() {
 
     }, [id])
 
+    function validateForm() {
+
+        if (!employee) {
+            return false
+        }
+
+        const newErrors = {}
+
+        if (!employee.firstName.trim()) {
+            newErrors.firstName = "First Name is Required"
+        }
+
+        if (!employee.lastName.trim()) {
+            newErrors.lastName = "Last Name is Required"
+        }
+
+        if (!employee.gender) {
+            newErrors.gender = "Gender is Required"
+        }
+
+        if (!employee.age) {
+            newErrors.age = "Age is Required"
+        }
+
+        if (!employee.email.trim()) {
+            newErrors.email = "Email is Required"
+        }
+
+        setErrors(newErrors)
+
+        return Object.keys(newErrors).length === 0
+    }
+
+
     async function handleUpdate(e) {
         e.preventDefault()
+
+        const isValid = validateForm()
+
+        console.log("Validation:", isValid)
+
+        if (!isValid) {
+            console.log("Update stopped")
+            return
+        }
+
+        console.log("Update API calling")
 
         const res = await fetch(`https://dummyjson.com/users/${id}`, {
             method: "PUT",
@@ -77,6 +123,9 @@ export default function EditEmployeePage() {
                                         })
                                     }}
                                 />
+                                {errors.firstName && (
+                                    <p style={{ color: "red" }}>{errors.firstName}</p>
+                                )}
                             </td>
                         </tr>
 
@@ -91,19 +140,59 @@ export default function EditEmployeePage() {
                                         })
                                     }}
                                 />
+                                {errors.lastName && (
+                                    <p style={{ color: "red" }}>{errors.lastName}</p>
+                                )}
                             </td>
                         </tr>
                         <tr>
                             <th>Employee Gender</th>
                             <td>
-                                <input type="text" value={employee.gender}
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="male"
+                                    checked={employee.gender === "male"}
+                                    style={{ cursor: "pointer" }}
                                     onChange={(e) => {
                                         setEmployee({
                                             ...employee,
                                             gender: e.target.value
                                         })
                                     }}
-                                />
+                                /> Male
+
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="female"
+                                    style={{ cursor: "pointer" }}
+                                    checked={employee.gender === "female"}
+                                    onChange={(e) => {
+                                        setEmployee({
+                                            ...employee,
+                                            gender: e.target.value
+                                        })
+                                    }}
+                                /> Female
+
+                                <input
+                                    type="radio"
+                                    name="gender"
+                                    value="other"
+                                    style={{ cursor: "pointer" }}
+                                    checked={employee.gender === "other"}
+                                    onChange={(e) => {
+                                        setEmployee({
+                                            ...employee,
+                                            gender: e.target.value
+                                        })
+                                    }}
+                                /> Other
+
+                                {errors.gender && (
+                                    <p style={{ color: "red" }}>{errors.gender}</p>
+                                )}
                             </td>
                         </tr>
                         <tr>
@@ -117,6 +206,9 @@ export default function EditEmployeePage() {
                                         })
                                     }}
                                 />
+                                {errors.age && (
+                                    <p style={{ color: "red" }}>{errors.age}</p>
+                                )}
                             </td>
                         </tr>
                         <tr>
@@ -130,12 +222,15 @@ export default function EditEmployeePage() {
                                         })
                                     }}
                                 />
+                                {errors.email && (
+                                    <p style={{ color: "red" }}>{errors.email}</p>
+                                )}
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
-                <button type="submit">Update</button>
+                <button type="submit" style={{ marginTop: "20px", cursor: "pointer" }}>Update</button>
             </form>
 
 
