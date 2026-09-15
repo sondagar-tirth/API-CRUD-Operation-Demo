@@ -6,6 +6,7 @@ export default function EditEmployeePage() {
 
     const [employee, setEmployee] = useState(null)
     const [errors, setErrors] = useState({})
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const router = useRouter()
 
@@ -32,6 +33,8 @@ export default function EditEmployeePage() {
         if (!employee) {
             return false
         }
+
+        setIsSubmitting(true)
 
         const newErrors = {}
 
@@ -230,7 +233,13 @@ export default function EditEmployeePage() {
                     </tbody>
                 </table>
 
-                <button type="submit" style={{ marginTop: "20px", cursor: "pointer" }}>Update</button>
+                <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    style={{ marginTop: "20px", cursor: "pointer" }}
+                >
+                    {isSubmitting ? "Updating..." : "Update Employee"}
+                </button>
             </form>
 
 

@@ -16,6 +16,7 @@ export default function AddEmployeePage() {
     })
 
     const [errors, setErrors] = useState({})
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
 
     function validateForm() {
@@ -55,6 +56,8 @@ export default function AddEmployeePage() {
         if (!validateForm()) {
             return
         }
+
+        setIsSubmitting(true)
 
         const res = await fetch("https://dummyjson.com/users/add", {
             method: "POST",
@@ -124,7 +127,7 @@ export default function AddEmployeePage() {
                                     name="gender"
                                     value="male"
                                     checked={employee.gender === "male"}
-                                    style={{cursor: "pointer"}}
+                                    style={{ cursor: "pointer" }}
                                     onChange={(e) => {
                                         setEmployee({
                                             ...employee,
@@ -137,7 +140,7 @@ export default function AddEmployeePage() {
                                     type="radio"
                                     name="gender"
                                     value="female"
-                                    style={{cursor: "pointer"}}
+                                    style={{ cursor: "pointer" }}
                                     checked={employee.gender === "female"}
                                     onChange={(e) => {
                                         setEmployee({
@@ -151,7 +154,7 @@ export default function AddEmployeePage() {
                                     type="radio"
                                     name="gender"
                                     value="other"
-                                    style={{cursor: "pointer"}}
+                                    style={{ cursor: "pointer" }}
                                     checked={employee.gender === "other"}
                                     onChange={(e) => {
                                         setEmployee({
@@ -204,7 +207,13 @@ export default function AddEmployeePage() {
                 </table>
 
 
-                <button type="submit" style={{ marginTop: "20px", cursor: "pointer" }}>Add Employee</button>
+                <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    style={{ marginTop: "20px", cursor: "pointer" }}
+                >
+                    {isSubmitting ? "Adding..." : "Add Employee"}
+                </button>
 
             </form>
 

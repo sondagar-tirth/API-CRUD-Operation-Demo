@@ -27,6 +27,7 @@ export default function Pagination({ page, totalPages, search }) {
             {isPending && (
                 <h2>Loading...</h2>
             )}
+            
             <div
                 style={{
                     display: "flex",
