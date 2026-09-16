@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { createEmployee } from "@/lib/api/employees"
 
 export default function AddEmployeePage() {
 
@@ -59,29 +60,26 @@ export default function AddEmployeePage() {
 
         setIsSubmitting(true)
 
-        const res = await fetch("https://dummyjson.com/users/add", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(employee)
-        })
+        try {
+            const data = await createEmployee({
+                ...employee,
+                age: Number(employee.age)
+            })
 
-        if (!res.ok) {
-            throw new Error("Employee add failed")
+            console.log(data)
+            alert("Employee Added Successfuully!!")
+            router.push("/employees")
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsSubmitting(false)
         }
-
-        const data = await res.json()
-
-        console.log(data)
-
-        router.push("/employees")
     }
 
     return (
-        <div>
-            <h1>Add Employee</h1>
-
+        <div style={{padding: "20px", width: "fit-content"}}>
+            <h1 style={{padding: "20px 0 0 "}}>Add Employee</h1>
+            <hr />
             <form onSubmit={handleSubmit}>
 
                 <table border="1" cellPadding="10" cellSpacing="0">
@@ -122,7 +120,7 @@ export default function AddEmployeePage() {
                         <tr>
                             <th>Employee Gender</th>
                             <td>
-                                <label style={{cursor: "pointer"}}>
+                                <label style={{ cursor: "pointer" }}>
 
                                     <input
                                         type="radio"
@@ -139,7 +137,7 @@ export default function AddEmployeePage() {
                                     /> Male
                                 </label>
 
-                                <label style={{cursor: "pointer"}}>
+                                <label style={{ cursor: "pointer" }}>
 
                                     <input
                                         type="radio"
@@ -156,7 +154,7 @@ export default function AddEmployeePage() {
                                     /> Female
                                 </label>
 
-                                <label style={{cursor: "pointer"}}>
+                                <label style={{ cursor: "pointer" }}>
 
                                     <input
                                         type="radio"

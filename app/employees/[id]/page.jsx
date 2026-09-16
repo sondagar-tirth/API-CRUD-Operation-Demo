@@ -1,45 +1,83 @@
-export default async function EmployeeDetailPage({params}){
+// import Image from "next/image"
+import Link from "next/link"
+import { getEmployeeById } from "@/lib/api/employees"
 
-    const {id} = await params
+export default async function EmployeeDetailsPage({ params }) {
+    const { id } = await params
 
-    const res = await fetch(`https://dummyjson.com/users/${id}`)
+    const employee = await getEmployeeById(id)
 
-    if(!res.ok){
-        throw new Error("Data Fetching Failed!!!")
-    }
+    return (
+        <main>
+            <h1 style={{ margin: "15px 0" }}>
+                Employee Details
+            </h1>
 
-    const empDetail = await res.json()
+            <table
+                border="1"
+                cellPadding="10"
+                cellSpacing="0"
+            >
+                <tbody>
+                    <tr>
+                        <th>Photo</th>
+                        <td>
+                            <img
+                                src={employee.image}
+                                alt={`${employee.firstName} ${employee.lastName}`}
+                                width={100}
+                                height={100}
+                                style={{
+                                    borderRadius: "50%",
+                                    objectFit: "cover",
+                                }}
+                            />
+                        </td>
+                    </tr>
 
-    return(
-        <div style={{ padding: "30px 20px", width: "fit-content" }}>
-            <h1 style={{ textAlign: "center"}}>Employee Detail</h1>
-            <hr />
-            <table border="1" cellPadding="10" cellSpacing="0">
-                <tr>
-                    <th>Employee Id</th>
-                    <td>{empDetail.id}</td>
-                </tr>
-                <tr>
-                    <th>Profile Picture</th>
-                    <td><img src={empDetail.image} alt="Employee Image" /></td>
-                </tr>
-                <tr>
-                    <th>Employee Name</th>
-                    <td>{empDetail.firstName} {empDetail.lastName}</td>
-                </tr>
-                <tr>
-                    <th>Employee Gender</th>
-                    <td>{empDetail.gender}</td>
-                </tr>
-                <tr>
-                    <th>Employee Age</th>
-                    <td>{empDetail.age}</td>
-                </tr>
-                <tr>
-                    <th>Employee Email</th>
-                    <td>{empDetail.email}</td>
-                </tr>
+                    <tr>
+                        <th>ID</th>
+                        <td>{employee.id}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Name</th>
+                        <td>
+                            {employee.firstName} {employee.lastName}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Gender</th>
+                        <td>{employee.gender}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Age</th>
+                        <td>{employee.age}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Email</th>
+                        <td>{employee.email}</td>
+                    </tr>
+
+                </tbody>
             </table>
-        </div>
+
+            <div style={{ marginTop: "20px" }}>
+                <Link href="/employees">
+                    <button>
+                        Back to Employees
+                    </button>
+                </Link>
+
+                <Link href={`/employees/edit/${employee.id}`}>
+                    <button style={{ marginLeft: "10px" }}>
+                        Edit Employee
+                    </button>
+                </Link>
+            </div>
+        </main>
     )
 }

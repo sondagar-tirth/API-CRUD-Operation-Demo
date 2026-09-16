@@ -1,40 +1,55 @@
-'use client'
-import { useState, useEffect } from "react"
+"use client"
+
+import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
+import { getEmployeeById, updateEmployee } from "@/lib/api/employees"
 
 export default function EditEmployeePage() {
 
-    const [employee, setEmployee] = useState(null)
-    const [errors, setErrors] = useState({})
-    const [isSubmitting, setIsSubmitting] = useState(false)
-
+    const { id } = useParams()
     const router = useRouter()
 
-    const { id } = useParams()
+    const [employee, setEmployee] = useState({
+        firstName: "",
+        lastName: "",
+        gender: "",
+        age: "",
+        email: ""
+    })
+
+    const [errors, setErrors] = useState({})
+    const [isLoading, setIsLoading] = useState(true)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
 
     useEffect(() => {
 
-        async function getEmployeeData() {
+        async function fetchEmployee() {
 
-            const res = await fetch(`https://dummyjson.com/users/${id}`)
+            try {
+                const data = await getEmployeeById(id)
 
-            const data = await res.json()
+                setEmployee({
+                    firstName: data.firstName || "",
+                    lastName: data.lastName || "",
+                    gender: data.gender || "",
+                    age: data.age || "",
+                    email: data.email || ""
+                })
 
-            setEmployee(data)
-
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setIsLoading(false)
+            }
         }
 
-        getEmployeeData()
+        fetchEmployee()
 
     }, [id])
 
+
     function validateForm() {
-
-        if (!employee) {
-            return false
-        }
-
-        setIsSubmitting(true)
 
         const newErrors = {}
 
@@ -64,61 +79,68 @@ export default function EditEmployeePage() {
     }
 
 
-    async function handleUpdate(e) {
+    async function handleSubmit(e) {
+
         e.preventDefault()
 
-        const isValid = validateForm()
-
-        console.log("Validation:", isValid)
-
-        if (!isValid) {
-            console.log("Update stopped")
+        if (!validateForm()) {
             return
         }
 
-        console.log("Update API calling")
+        setIsSubmitting(true)
 
-        const res = await fetch(`https://dummyjson.com/users/${id}`, {
-            method: "PUT",
+        try {
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+            const data = await updateEmployee(id, {
+                ...employee,
+                age: Number(employee.age)
+            })
 
-            body: JSON.stringify(employee)
-        })
+            console.log(data)
 
-        if (!res.ok) {
-            throw new Error("Employee Update Failed")
+            alert("Employee Updated Successfully!!")
+
+            router.push("/employees")
+
+        } catch (error) {
+
+            console.error(error)
+
+        } finally {
+
+            setIsSubmitting(false)
+
         }
-
-        const data = await res.json()
-
-        console.log(data);
-
-        alert("Employee Detail Update Successfully")
-
-        router.push("/employees")
     }
 
-    if (!employee) {
-        return <h1> Loading... </h1>
+
+    if (isLoading) {
+        return <p>Loading Employee...</p>
     }
+
 
     return (
-        <div style={{ padding: "30px 20px", width: "fit-content" }}>
+        <div style={{ padding: "20px", width: "fit-content" }}>
 
-            <h1 style={{ textAlign: "center" }}>Employee Detail Update</h1>
+            <h1 style={{ padding: "20px 0 0" }}>
+                Edit Employee
+            </h1>
+
             <hr />
 
-            <form onSubmit={handleUpdate}>
+            <form onSubmit={handleSubmit}>
 
                 <table border="1" cellPadding="10" cellSpacing="0">
+
                     <tbody>
+
                         <tr>
                             <th>Employee First Name</th>
+
                             <td>
-                                <input type="text" value={employee.firstName}
+                                <input
+                                    type="text"
+                                    value={employee.firstName}
                                     onChange={(e) => {
                                         setEmployee({
                                             ...employee,
@@ -126,16 +148,23 @@ export default function EditEmployeePage() {
                                         })
                                     }}
                                 />
+
                                 {errors.firstName && (
-                                    <p style={{ color: "red" }}>{errors.firstName}</p>
+                                    <p style={{ color: "red" }}>
+                                        {errors.firstName}
+                                    </p>
                                 )}
                             </td>
                         </tr>
 
+
                         <tr>
                             <th>Employee Last Name</th>
+
                             <td>
-                                <input type="text" value={employee.lastName}
+                                <input
+                                    type="text"
+                                    value={employee.lastName}
                                     onChange={(e) => {
                                         setEmployee({
                                             ...employee,
@@ -143,15 +172,23 @@ export default function EditEmployeePage() {
                                         })
                                     }}
                                 />
+
                                 {errors.lastName && (
-                                    <p style={{ color: "red" }}>{errors.lastName}</p>
+                                    <p style={{ color: "red" }}>
+                                        {errors.lastName}
+                                    </p>
                                 )}
                             </td>
                         </tr>
+
+
                         <tr>
                             <th>Employee Gender</th>
+
                             <td>
+
                                 <label style={{ cursor: "pointer" }}>
+
                                     <input
                                         type="radio"
                                         name="gender"
@@ -164,50 +201,85 @@ export default function EditEmployeePage() {
                                                 gender: e.target.value
                                             })
                                         }}
-                                    />  Male
+                                    />
+
+                                    {" "}Male
+
                                 </label>
 
-                                <label style={{ cursor: "pointer" }}>
+
+                                <label
+                                    style={{
+                                        cursor: "pointer",
+                                        marginLeft: "15px"
+                                    }}
+                                >
+
                                     <input
                                         type="radio"
                                         name="gender"
                                         value="female"
-                                        style={{ cursor: "pointer" }}
                                         checked={employee.gender === "female"}
+                                        style={{ cursor: "pointer" }}
                                         onChange={(e) => {
                                             setEmployee({
                                                 ...employee,
                                                 gender: e.target.value
                                             })
                                         }}
-                                    /> Female
+                                    />
+
+                                    {" "}Female
+
                                 </label>
 
-                                <label style={{ cursor: "pointer" }}>
+
+                                <label
+                                    style={{
+                                        cursor: "pointer",
+                                        marginLeft: "15px"
+                                    }}
+                                >
+
                                     <input
                                         type="radio"
                                         name="gender"
                                         value="other"
-                                        style={{ cursor: "pointer" }}
                                         checked={employee.gender === "other"}
+                                        style={{ cursor: "pointer" }}
                                         onChange={(e) => {
                                             setEmployee({
                                                 ...employee,
                                                 gender: e.target.value
                                             })
                                         }}
-                                    /> Other
+                                    />
+
+                                    {" "}Other
+
                                 </label>
 
+
                                 {errors.gender && (
-                                    <p style={{ color: "red" }}>{errors.gender}</p>
+                                    <p style={{ color: "red" }}>
+                                        {errors.gender}
+                                    </p>
                                 )}
+
                             </td>
                         </tr>
+
+
                         <tr>
                             <th>Employee Age</th>
+
                             <td>
-                                <input type="number" value={employee.age}
+
+                                <input
+                                    type="number"
+                                    value={employee.age}
+                                    min={10}
+                                    max={150}
                                     onChange={(e) => {
                                         setEmployee({
                                             ...employee,
@@ -215,15 +287,25 @@ export default function EditEmployeePage() {
                                         })
                                     }}
                                 />
+
                                 {errors.age && (
-                                    <p style={{ color: "red" }}>{errors.age}</p>
+                                    <p style={{ color: "red" }}>
+                                        {errors.age}
+                                    </p>
                                 )}
+
                             </td>
                         </tr>
+
+
                         <tr>
                             <th>Employee Email</th>
+
                             <td>
-                                <input type="email" value={employee.email}
+
+                                <input
+                                    type="email"
+                                    value={employee.email}
                                     onChange={(e) => {
                                         setEmployee({
                                             ...employee,
@@ -231,23 +313,36 @@ export default function EditEmployeePage() {
                                         })
                                     }}
                                 />
+
                                 {errors.email && (
-                                    <p style={{ color: "red" }}>{errors.email}</p>
+                                    <p style={{ color: "red" }}>
+                                        {errors.email}
+                                    </p>
                                 )}
+
                             </td>
                         </tr>
+
                     </tbody>
+
                 </table>
+
 
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    style={{ marginTop: "20px", cursor: "pointer" }}
+                    style={{
+                        marginTop: "20px",
+                        cursor: "pointer"
+                    }}
                 >
-                    {isSubmitting ? "Updating..." : "Update Employee"}
+                    {isSubmitting
+                        ? "Updating..."
+                        : "Update Employee"
+                    }
                 </button>
-            </form>
 
+            </form>
 
         </div>
     )
