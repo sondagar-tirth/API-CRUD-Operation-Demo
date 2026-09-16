@@ -15,9 +15,9 @@ export default function SearchBar() {
 
         setSearch(value)
 
-        if(value){
+        if (value) {
             router.push(`/employees?search=${value}`)
-        }else{
+        } else {
             router.push("/employees")
         }
     }

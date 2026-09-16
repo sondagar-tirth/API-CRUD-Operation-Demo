@@ -122,47 +122,56 @@ export default function AddEmployeePage() {
                         <tr>
                             <th>Employee Gender</th>
                             <td>
-                                <input
-                                    type="radio"
-                                    name="gender"
-                                    value="male"
-                                    checked={employee.gender === "male"}
-                                    style={{ cursor: "pointer" }}
-                                    onChange={(e) => {
-                                        setEmployee({
-                                            ...employee,
-                                            gender: e.target.value
-                                        })
-                                    }}
-                                /> Male
+                                <label style={{cursor: "pointer"}}>
 
-                                <input
-                                    type="radio"
-                                    name="gender"
-                                    value="female"
-                                    style={{ cursor: "pointer" }}
-                                    checked={employee.gender === "female"}
-                                    onChange={(e) => {
-                                        setEmployee({
-                                            ...employee,
-                                            gender: e.target.value
-                                        })
-                                    }}
-                                /> Female
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value="male"
+                                        checked={employee.gender === "male"}
+                                        style={{ cursor: "pointer" }}
+                                        onChange={(e) => {
+                                            setEmployee({
+                                                ...employee,
+                                                gender: e.target.value
+                                            })
+                                        }}
+                                    /> Male
+                                </label>
 
-                                <input
-                                    type="radio"
-                                    name="gender"
-                                    value="other"
-                                    style={{ cursor: "pointer" }}
-                                    checked={employee.gender === "other"}
-                                    onChange={(e) => {
-                                        setEmployee({
-                                            ...employee,
-                                            gender: e.target.value
-                                        })
-                                    }}
-                                /> Other
+                                <label style={{cursor: "pointer"}}>
+
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value="female"
+                                        style={{ cursor: "pointer" }}
+                                        checked={employee.gender === "female"}
+                                        onChange={(e) => {
+                                            setEmployee({
+                                                ...employee,
+                                                gender: e.target.value
+                                            })
+                                        }}
+                                    /> Female
+                                </label>
+
+                                <label style={{cursor: "pointer"}}>
+
+                                    <input
+                                        type="radio"
+                                        name="gender"
+                                        value="other"
+                                        style={{ cursor: "pointer" }}
+                                        checked={employee.gender === "other"}
+                                        onChange={(e) => {
+                                            setEmployee({
+                                                ...employee,
+                                                gender: e.target.value
+                                            })
+                                        }}
+                                    /> Other
+                                </label>
 
                                 {errors.gender && (
                                     <p style={{ color: "red" }}>{errors.gender}</p>
